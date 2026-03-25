@@ -1,73 +1,47 @@
-# React + TypeScript + Vite
+# dmui-components
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Libreria de componentes UI para React, lista para usar. Sin configuracion extra, sin theming complejo — llega e importa.
 
-Currently, two official plugins are available:
+Inspirada en Material UI pero sin la sobrecarga. Los componentes vienen con estilos y comportamiento incluidos, pensados para que puedas construir interfaces rapido sin tener que tomar decisiones de diseno desde cero.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Instalacion
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install dmui-components
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Uso
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```tsx
+import { Button } from 'dmui-components'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+function App() {
+  return <Button variant="primary">Guardar</Button>
+}
 ```
+
+## Componentes disponibles
+
+| Componente | Descripcion |
+|---|---|
+| `Button` | Boton con variantes de estilo y estados |
+
+> Mas componentes en desarrollo.
+
+## Filosofia
+
+- **Listo para usar**: cada componente trae sus estilos incorporados
+- **Sin configuracion**: no necesitas un provider, un tema ni setup inicial
+- **Pragmatico**: cubre los casos de uso comunes sin sobre-abstraer
+
+## Desarrollo
+
+```bash
+npm install
+npm run dev    # modo desarrollo
+npm run build  # compilar la libreria
+```
+
+## Requisitos
+
+- React >= 18
