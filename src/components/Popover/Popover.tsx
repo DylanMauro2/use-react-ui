@@ -34,7 +34,6 @@ interface PopoverProps {
 // 1. Root: El orquestador
 export function Popover({ children, open: controlledOpen, onOpenChange }: PopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
   const triggerRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -46,16 +45,10 @@ export function Popover({ children, open: controlledOpen, onOpenChange }: Popove
     onOpenChange?.(value);
   };
 
-  useEffect(() => {
-    if (isOpen && triggerRef.current) {
-      setAnchorRect(triggerRef.current.getBoundingClientRect());
-    }
-  }, [isOpen]);
-
   const toggle = () => setIsOpen(!isOpen);
 
   return (
-    <PopoverContext.Provider value={{ isOpen, setIsOpen, toggle, triggerRef, contentRef, anchorRect }}>
+    <PopoverContext.Provider value={{ isOpen, setIsOpen, toggle, triggerRef, contentRef }}>
       <div className="popover-root">{children}</div>
     </PopoverContext.Provider>
   );
@@ -86,8 +79,8 @@ export function PopoverTrigger({ children, asChild, ...props }: any) {
 
 // 3. Content: Con Reposicionamiento Automático
 export function PopoverContent({ children, className }: any) {
-  const { isOpen, setIsOpen, anchorRect, contentRef, triggerRef } = useContext(PopoverContext);
-  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const { isOpen, setIsOpen, contentRef, triggerRef } = useContext(PopoverContext);
+  const [coords, setCoords] = useState({ top: 0, left: 0, width: undefined as number | undefined });
 
   useEffect(() => {
     if (!isOpen || !contentRef.current || !triggerRef.current) return;
@@ -111,7 +104,8 @@ export function PopoverContent({ children, className }: any) {
 
       setCoords({
         top,
-        left: rect.left + window.scrollX
+        left: rect.left + window.scrollX,
+        width: rect.width > 150 ? rect.width : undefined,
       });
     };
 
@@ -151,7 +145,7 @@ export function PopoverContent({ children, className }: any) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  if (!isOpen || !anchorRect) return null;
+  if (!isOpen) return null;
 
   return createPortal(
     <div
@@ -160,6 +154,7 @@ export function PopoverContent({ children, className }: any) {
       style={{
         top: coords.top,
         left: coords.left,
+        ...(coords.width ? { width: coords.width } : {}),
         visibility: coords.top === 0 ? 'hidden' : 'visible',
       }}
       className={`popover-content${className ? ` ${className}` : ''}`}
