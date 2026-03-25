@@ -1,30 +1,45 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
-import { libInjectCss } from 'vite-plugin-lib-inject-css'
 import { resolve } from 'path'
+
+function injectCSSImport(): Plugin {
+  return {
+    name: 'inject-css-import',
+    apply: 'build',
+    generateBundle(_, bundle) {
+      for (const chunk of Object.values(bundle)) {
+        if (chunk.type === 'chunk' && chunk.fileName === 'use-react-ui.js') {
+          chunk.code = `import './index.css';\n${chunk.code}`
+        }
+      }
+    },
+  }
+}
 
 export default defineConfig({
   plugins: [
     react(),
-    libInjectCss(),
     dts({
       include: ['src'],
-      insertTypesEntry: true,
+      exclude: ['src/App.tsx', 'src/main.tsx', 'src/vite-env.d.ts'],
+      outDir: 'dist',
       rollupTypes: true,
-      tsconfigPath: resolve(__dirname, 'tsconfig.app.json'),
+      tsconfigPath: resolve('./tsconfig.build.json'),
     }),
+    injectCSSImport(),
   ],
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'UseReactUI',
       fileName: 'use-react-ui',
+      formats: ['es', 'cjs'],
+      cssFileName: 'index',
     },
     rollupOptions: {
       external: ['react', 'react-dom', 'react/jsx-runtime'],
       output: {
-        banner: '"use client";',
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
@@ -32,5 +47,6 @@ export default defineConfig({
         },
       },
     },
+    cssCodeSplit: false,
   },
 })
