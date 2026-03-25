@@ -1,0 +1,29 @@
+.popover-root {
+  position: relative;
+  display: inline-block;
+}
+
+.popover-trigger {
+  padding: 8px 16px;
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.popover-trigger:hover {
+  background-color: #2563eb;
+}
+
+.popover-content {
+  position: absolute;
+  z-index: 1000;
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  min-width: 150px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
