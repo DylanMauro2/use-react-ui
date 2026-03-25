@@ -99,6 +99,29 @@ export default function App() {
         </div>
       </div>
 
+      <div style={styles.section}>
+        <div style={styles.sectionTitle}>Button</div>
+
+        <p style={styles.label}>Variants</p>
+        <div style={styles.row}>
+          <Button variant="primary">Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="danger">Danger</Button>
+        </div>
+
+        <p style={styles.label}>Sizes</p>
+        <div style={styles.row}>
+          <Button size="sm">Small</Button>
+          <Button size="md">Medium</Button>
+          <Button size="lg">Large</Button>
+        </div>
+
+        <p style={styles.label}>Disabled</p>
+        <div style={styles.row}>
+          <Button disabled style={{ opacity: 0.4, cursor: 'not-allowed' }}>Disabled</Button>
+        </div>
+      </div>
+
       {/* Popover */}
       <div style={styles.section}>
         <div style={styles.sectionTitle}>Popover</div>

@@ -90,38 +90,51 @@ export function PopoverContent({ children, className }: any) {
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
-    if (!isOpen || !anchorRect || !contentRef.current) return;
+    if (!isOpen || !contentRef.current || !triggerRef.current) return;
 
     const calculatePosition = () => {
       const root = contentRef.current;
-      if (!root) return;
+      const trigger = triggerRef.current;
+      if (!root || !trigger) return;
 
+      const rect = trigger.getBoundingClientRect();
       const contentHeight = root.offsetHeight;
       const viewportHeight = window.innerHeight;
-      const spaceBelow = viewportHeight - anchorRect.bottom;
-      const spaceAbove = anchorRect.top;
+      const spaceBelow = viewportHeight - rect.bottom;
+      const spaceAbove = rect.top;
 
-      let top = anchorRect.bottom + window.scrollY + 5; // Por defecto abajo
+      let top = rect.bottom + window.scrollY + 5;
 
-      // Lógica de Reposicionamiento: 
-      // Si no hay espacio abajo Y hay más espacio arriba, lo movemos arriba.
       if (spaceBelow < contentHeight && spaceAbove > spaceBelow) {
-        top = anchorRect.top + window.scrollY - contentHeight - 5;
+        top = rect.top + window.scrollY - contentHeight - 5;
       }
 
       setCoords({
         top,
-        left: anchorRect.left + window.scrollX
+        left: rect.left + window.scrollX
       });
     };
 
-    // Ejecutamos al abrir
     calculatePosition();
 
-    // Re-calculamos si el usuario cambia el tamaño de la ventana
+    let scrollTimer: ReturnType<typeof setTimeout>;
+    const handleScroll = () => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(calculatePosition, 150);
+    };
+
+    const resizeObserver = new ResizeObserver(calculatePosition);
+    resizeObserver.observe(contentRef.current);
+
     window.addEventListener('resize', calculatePosition);
-    return () => window.removeEventListener('resize', calculatePosition);
-  }, [isOpen, anchorRect]);
+    window.addEventListener('scroll', handleScroll, true);
+    return () => {
+      clearTimeout(scrollTimer);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', calculatePosition);
+      window.removeEventListener('scroll', handleScroll, true);
+    };
+  }, [isOpen]);
 
   // Lógica de Click Outside (Misma que antes)
   useEffect(() => {
