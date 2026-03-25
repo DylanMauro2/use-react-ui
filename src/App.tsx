@@ -71,7 +71,7 @@ export default function App() {
   return (
     <div style={styles.page}>
       <div style={styles.header}>
-        <h1 style={styles.title}>dmui-components</h1>
+        <h1 style={styles.title}>use-react-ui</h1>
         <p style={styles.subtitle}>Component playground</p>
       </div>
 

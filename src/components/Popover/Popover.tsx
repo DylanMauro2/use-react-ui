@@ -8,7 +8,7 @@ const Slot = ({ children, ...props }: any) => {
   if (isValidElement(children)) {
     return cloneElement(children, {
       ...props,
-      ...children.props,
+      ...(children.props as object),
       // Combinamos las refs si ambos tienen una
       ref: (node: any) => {
         if (typeof props.ref === 'function') props.ref(node);

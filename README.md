@@ -1,4 +1,4 @@
-# dmui-components
+# use-react-ui
 
 Libreria de componentes UI para React, lista para usar. Sin configuracion extra, sin theming complejo — llega e importa.
 
@@ -7,13 +7,13 @@ Inspirada en Material UI pero sin la sobrecarga. Los componentes vienen con esti
 ## Instalacion
 
 ```bash
-npm install dmui-components
+npm install use-react-ui
 ```
 
 ## Uso
 
 ```tsx
-import { Button } from 'dmui-components'
+import { Button } from 'use-react-ui'
 
 function App() {
   return <Button variant="primary">Guardar</Button>
